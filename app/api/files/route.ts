@@ -24,9 +24,8 @@ export async function GET(request: NextRequest) {
             );
         }
 
-
         let userFiles;
-        
+
         if (parentId) {
             userFiles = await db
                 .select()
