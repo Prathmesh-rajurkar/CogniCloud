@@ -55,6 +55,8 @@ export default function FileList({
     setLoading(true);
     try {
       let url = `/api/files?userId=${userId}`;
+      // console.log(url);
+      
       if (currentFolder) {
         url += `&parentId=${currentFolder}`;
       }

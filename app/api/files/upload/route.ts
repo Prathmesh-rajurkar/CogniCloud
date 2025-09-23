@@ -13,98 +13,96 @@ const imagekit = new ImageKit({
 });
 
 export async function POST(request: NextRequest) {
-    try {
-        // Check if the request is authenticated
-        const { userId } = await auth();
-        if (!userId) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 }
-            );
-        }
-
-        const formData = await request.formData();
-        const file = formData.get("file") as File;
-        const formParentId = formData.get("parentId") as string;
-        const formUserId = formData.get("userId") as string;
-
-        if (!file || !formUserId || formUserId !== userId) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 }
-            );
-        }
-
-        if (formParentId) {
-            const [parentFolder] = await db
-                .select()
-                .from(files)
-                .where(
-                    and(
-                        eq(files.id, formParentId),
-                        eq(files.userId, userId),
-                        eq(files.isFolder, true)
-                    )
-                );
-        } else {
-            return NextResponse.json(
-                { error: "Parent folder not found" },
-                { status: 404 }
-            );
-        }
-        if (
-            !file.type.startsWith("image/") &&
-            file.type !== "application/pdf"
-        ) {
-            return NextResponse.json(
-                { error: "Only Images and PDF are supported" },
-                { status: 400 }
-            );
-        }
-
-        const buffer = await file.arrayBuffer();
-        const fileBuffer = Buffer.from(buffer);
-        const originalFileName = file.name;
-        const folderPath = formParentId
-            ? `/droply/${userId}/folder/${formParentId}`
-            : `/droply/${userId}`;
-        const fileExtension = originalFileName.split(".").pop() || "";
-        if (!fileExtension) {
-            return NextResponse.json(
-                { error: "File extension not found" },
-                { status: 400 }
-            );
-        }
-        const uniqueFileName = `${uuidv4()}.${fileExtension}`;
-        const uploadResponse = await imagekit.upload({
-            file: fileBuffer,
-            fileName: uniqueFileName,
-            folder: folderPath,
-            useUniqueFileName: false,
-        });
-
-        const fileData = {
-            name: originalFileName,
-            path: uploadResponse.filePath,
-            size: file.size,
-            type: file.type,
-            fileUrl: uploadResponse.url,
-            thumbnailUrl: uploadResponse.thumbnailUrl || null,
-            userId: userId,
-            parentId: formParentId,
-            isFolder: false,
-            isStarred: false,
-            isTrash: false,
-        };
-
-        const [newData] = await db.insert(files).values(fileData).returning();
-
-        return NextResponse.json(newData);
-    } catch (error) {
-        console.error("Error uploading file:", error);
-        return NextResponse.json(
-            { error: "Failed to upload file" },
-            { status: 500 }
-        );
+  try {
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+
+    const formData = await request.formData();
+    const file = formData.get("file") as File;
+    const formUserId = formData.get("userId") as string;
+    const parentId = (formData.get("parentId") as string) || null;
+
+    // Verify the user is uploading to their own account
+    if (formUserId !== userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    if (!file) {
+      return NextResponse.json({ error: "No file provided" }, { status: 400 });
+    }
+
+    // Check if parent folder exists if parentId is provided
+    if (parentId) {
+      const [parentFolder] = await db
+        .select()
+        .from(files)
+        .where(
+          and(
+            eq(files.id, parentId),
+            eq(files.userId, userId),
+            eq(files.isFolder, true)
+          )
+        );
+
+      if (!parentFolder) {
+        return NextResponse.json(
+          { error: "Parent folder not found" },
+          { status: 404 }
+        );
+      }
+    }
+
+    // Only allow image uploads
+    if (!file.type.startsWith("image/") && file.type !== "application/pdf") {
+      return NextResponse.json(
+        { error: "Only image files are supported" },
+        { status: 400 }
+      );
+    }
+
+    const buffer = await file.arrayBuffer();
+    const fileBuffer = Buffer.from(buffer);
+
+    const originalFilename = file.name;
+    const fileExtension = originalFilename.split(".").pop() || "";
+    const uniqueFilename = `${uuidv4()}.${fileExtension}`;
+
+    // Create folder path based on parent folder if exists
+    const folderPath = parentId
+      ? `/cognicloud/${userId}/folders/${parentId}`
+      : `/cognicloud/${userId}`;
+
+    const uploadResponse = await imagekit.upload({
+      file: fileBuffer,
+      fileName: uniqueFilename,
+      folder: folderPath,
+      useUniqueFileName: false,
+    });
+
+    const fileData = {
+      name: originalFilename,
+      path: uploadResponse.filePath,
+      size: file.size,
+      type: file.type,
+      fileUrl: uploadResponse.url,
+      thumbnailUrl: uploadResponse.thumbnailUrl || null,
+      userId: userId,
+      parentId: parentId,
+      isFolder: false,
+      isStarred: false,
+      isTrash: false,
+    };
+
+    const [newFile] = await db.insert(files).values(fileData).returning();
+
+    return NextResponse.json(newFile);
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    return NextResponse.json(
+      { error: "Failed to upload file" },
+      { status: 500 }
+    );
+  }
 }

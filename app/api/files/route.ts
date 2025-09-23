@@ -14,9 +14,12 @@ export async function GET(request: NextRequest) {
             );
         }
         const searchParams = request.nextUrl.searchParams;
-        const queryUserId = searchParams.get("query");
+        // console.log("Search params:", Array.from(searchParams.entries()));
+        
+        const queryUserId = searchParams.get("userId");
         const parentId = searchParams.get("parentId");
-
+        // console.log("Query params:", { queryUserId, parentId });
+        
         if (!queryUserId || queryUserId !== userId) {
             return NextResponse.json(
                 { error: "Unauthorized" },
@@ -39,7 +42,7 @@ export async function GET(request: NextRequest) {
                 .from(files)
                 .where(and(eq(files.userId, userId), isNull(files.parentId)));
         }
-
+        // console.log("Fetched files:", userFiles);
         return NextResponse.json(userFiles);
     } catch (error) {
         console.error("Error fetching files:", error);

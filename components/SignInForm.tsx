@@ -93,7 +93,7 @@ export default function SignInForm() {
             <Input
               id="identifier"
               type="email"
-              placeholder="your.email@example.com"
+              placeholder=" Enter Your Email"
               startContent={<Mail className="h-4 w-4 text-default-500" />}
               isInvalid={!!errors.identifier}
               errorMessage={errors.identifier?.message}
@@ -114,7 +114,7 @@ export default function SignInForm() {
             <Input
               id="password"
               type={showPassword ? "text" : "password"}
-              placeholder="••••••••"
+              placeholder=" Enter Your Password"
               startContent={<Lock className="h-4 w-4 text-default-500" />}
               endContent={
                 <Button
