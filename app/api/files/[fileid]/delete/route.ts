@@ -15,7 +15,7 @@ const imagekit = new ImageKit({
 
 export async function DELETE(
     request: NextRequest,
-    props: { params: { fileId: string } }
+    props: { params: Promise<{ fileId: string }> }
 ) {
     try {
         const { userId } = await auth();
@@ -26,7 +26,7 @@ export async function DELETE(
             );
         }
 
-        const { fileId } = props.params;
+        const { fileId } = await props.params;
 
         if (!fileId) {
             return NextResponse.json(
