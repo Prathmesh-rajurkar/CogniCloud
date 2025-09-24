@@ -43,5 +43,5 @@ export const filesRelations = relations(files, ({ one, many }) => ({
 }));
 
 // tyoe definitions for TypeScript
-export const File = typeof files.$inferSelect
-export const NewFile = typeof files.$inferInsert
+export type FileType = typeof files.$inferSelect
+export type NewFile = typeof files.$inferInsert

@@ -35,11 +35,11 @@ export async function PATCH(
     // Toggle the isTrash status (move to trash or restore)
     const [updatedFile] = await db
       .update(files)
-      .set({ isTrash: !file.isTrash })
+      .set({ isTrashed: !file.isTrashed })
       .where(and(eq(files.id, fileId), eq(files.userId, userId)))
       .returning();
 
-    const action = updatedFile.isTrash ? "moved to trash" : "restored";
+    const action = updatedFile.isTrashed ? "moved to trash" : "restored";
     return NextResponse.json({
       ...updatedFile,
       message: `File ${action} successfully`,
