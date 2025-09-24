@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { files } from "@/lib/db/schema";
 import { eq, and } from "drizzle-orm";
 import ImageKit from "imagekit";
+import { FileObject } from "imagekit/dist/libs/interfaces";
 
 // Initialize ImageKit with your credentials
 const imagekit = new ImageKit({
@@ -69,7 +70,7 @@ export async function DELETE(
                         });
 
                         if (searchResults && searchResults.length > 0) {
-                            const fileResult = searchResults[0] as any; // fallback
+                            const fileResult = searchResults[0] as FileObject; // fallback
                             if (fileResult.fileId) {
                                 await imagekit.deleteFile(fileResult.fileId);
                             }
