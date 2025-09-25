@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
             parentId: null, 
             isFolder: false,
             isStarred: false,
-            isTrash: false,
+            isTrashed: false,
         };
 
         const [newfile] = await db.insert(files).values(fileData).returning();

@@ -141,16 +141,16 @@ export default function FileList({
       // Update local state
       setFiles(
         files.map((file) =>
-          file.id === fileId ? { ...file, isTrash: !file.isTrashed } : file
+          file.id === fileId ? { ...file, isTrashed: !file.isTrashed } : file
         )
       );
 
       // Show toast
       const file = files.find((f) => f.id === fileId);
       addToast({
-        title: responseData.isTrash ? "Moved to Trash" : "Restored from Trash",
+        title: responseData.isTrashed ? "Moved to Trash" : "Restored from Trash",
         description: `"${file?.name}" has been ${
-          responseData.isTrash ? "moved to trash" : "restored"
+          responseData.isTrashed ? "moved to trash" : "restored"
         }`,
         color: "success",
       });

@@ -3,7 +3,7 @@
 import { File, Star, Trash } from "lucide-react";
 import { Tabs, Tab } from "@heroui/tabs";
 import Badge from "@/components/ui/Badge";
-import type { File as FileType } from "@/lib/db/schema";
+import type { FileType } from "@/lib/db/schema";
 
 interface FileTabsProps {
   activeTab: string;
@@ -43,9 +43,9 @@ export default function FileTabs({
               variant="flat"
               color="default"
               size="sm"
-              aria-label={`${files.filter((file) => !file.isTrash).length} files`}
+              aria-label={`${files.filter((file) => !file.isTrashed).length} files`}
             >
-              {files.filter((file) => !file.isTrash).length}
+              {files.filter((file) => !file.isTrashed).length}
             </Badge>
           </div>
         }
