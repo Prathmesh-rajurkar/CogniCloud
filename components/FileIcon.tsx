@@ -2,7 +2,7 @@
 
 import { Folder, FileText } from "lucide-react";
 import { IKImage } from "imagekitio-next";
-import type { File as FileType } from "@/lib/db/schema";
+import type { FileType } from "@/lib/db/schema";
 
 interface FileIconProps {
   file: FileType;
