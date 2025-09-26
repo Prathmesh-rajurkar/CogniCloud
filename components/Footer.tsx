@@ -18,7 +18,7 @@ const Footer = () => {
                         how you store files?
                     </h2>
                     <p className="text-xl mb-12 text-blue-100">
-                        Join millions of users who've already made the switch to
+                        Join millions of users who&apos;ve already made the switch to
                         the future of file storage.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
