@@ -5,29 +5,29 @@ import { Providers } from "./providers";
 import "../styles/globals.css";
 
 const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
+    subsets: ["latin"],
+    variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
-  title: "Droply",
-  description: "Secure cloud storage for your images, powered by ImageKit",
+    title: "Droply",
+    description: "Secure cloud storage for your images, powered by ImageKit",
 };
 
 export default function RootLayout({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
-  return (
-    <ClerkProvider>
-      <html lang="en" className="dark">
-        <body
-          className={`${inter.variable} antialiased bg-background text-foreground`}
-        >
-          <Providers>{children}</Providers>
-        </body>
-      </html>
-    </ClerkProvider>
-  );
+    return (
+        <ClerkProvider>
+            <html lang="en" suppressHydrationWarning>
+                <body
+                    className={`${inter.variable} antialiased bg-background text-foreground`}
+                >
+                    {children}
+                </body>
+            </html>
+        </ClerkProvider>
+    );
 }

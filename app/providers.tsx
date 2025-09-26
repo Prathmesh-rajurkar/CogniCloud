@@ -1,6 +1,5 @@
 "use client";
 
-import type { ThemeProviderProps } from "next-themes";
 import * as React from "react";
 import { HeroUIProvider } from "@heroui/system";
 import { useRouter } from "next/navigation";
@@ -11,7 +10,6 @@ import { createContext, useContext } from "react";
 
 export interface ProvidersProps {
   children: React.ReactNode;
-  themeProps?: ThemeProviderProps;
 }
 
 declare module "@react-types/shared" {
@@ -47,9 +45,8 @@ const authenticator = async () => {
   }
 };
 
-export function Providers({ children, themeProps }: ProvidersProps) {
+export function Providers({ children}: ProvidersProps) {
   const router = useRouter();
-
   return (
     <HeroUIProvider navigate={router.push}>
       <ImageKitProvider
@@ -59,7 +56,7 @@ export function Providers({ children, themeProps }: ProvidersProps) {
       >
         <ImageKitAuthContext.Provider value={{ authenticate: authenticator }}>
           <ToastProvider placement="top-right" />
-          <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
+          <NextThemesProvider attribute={'class'}>{children}</NextThemesProvider>
         </ImageKitAuthContext.Provider>
       </ImageKitProvider>
     </HeroUIProvider>
