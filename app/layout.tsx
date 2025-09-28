@@ -27,6 +27,7 @@ export default function RootLayout({
                     className={`${inter.variable} antialiased bg-background text-foreground`}
                 >
                     <ThemeProvider attribute='class'>
+                        
                   {children}
                   </ThemeProvider>
                 </body>

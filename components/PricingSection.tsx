@@ -45,7 +45,7 @@ const PricingSection = () => {
                 ))}
               </ul>
               <Button 
-                className="w-full h-12"
+                className="w-full h-12 cursor-pointer"
                 variant="outline"
                 onClick={() => setShowSignIn(true)}
               >
@@ -64,7 +64,7 @@ const PricingSection = () => {
                 <p className="text-blue-100">Everything you need to scale</p>
               </div>
               <ul className="space-y-4 mb-8">
-                {["Unlimited storage", "Unlimited devices", "Advanced sharing", "AI organization", "Priority support"].map((feature) => (
+                {["Unlimited storage", "Unlimited devices", "Advanced sharing", "AI organization"].map((feature) => (
                   <li key={feature} className="flex items-center">
                     <Check className="w-5 h-5 text-white mr-3" />
                     {feature}
@@ -72,7 +72,7 @@ const PricingSection = () => {
                 ))}
               </ul>
               <Button 
-                className="w-full h-12 bg-white text-blue-600 hover:bg-gray-100"
+                className="w-full h-12 bg-white text-blue-600 hover:bg-gray-100 cursor-pointer"
                 onClick={() => setShowSignIn(true)}
               >
                 Start Free Trial

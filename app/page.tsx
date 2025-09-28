@@ -22,7 +22,7 @@ export default function Home() {
                 ></div>
             </div>
             <div className="bg-transparent h-screen max-w-screen transition-colors duration-300">
-                <ThemeToggler />
+                {/* <ThemeToggler /> */}
                 <div className="fixed w-full p-4 z-100">
                     <Navbar />
                 </div>
