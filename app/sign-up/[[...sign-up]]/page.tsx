@@ -1,11 +1,13 @@
-import React from 'react'
+"use client";
 
-const page = () => {
+import { SignUp } from "@clerk/nextjs";
+import React from "react";
+
+
+export default function SignUpPage() {
   return (
-    <div>
-      
+    <div className="p-4 max-w-4xl mx-auto flex items-center justify-center">
+      <SignUp/>
     </div>
-  )
+  );
 }
-
-export default page
